@@ -32,12 +32,17 @@ def load_fonts():
 def main():
     pygame.init()
 
-    # Use FULLSCREEN for production, RESIZABLE for development.
-    # Change pygame.FULLSCREEN → 0 (or pygame.RESIZABLE) during dev.
-    flags  = 0  # pygame.FULLSCREEN untuk production
-    screen = pygame.display.set_mode((config.SCREEN_W, config.SCREEN_H), flags)
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     pygame.display.set_caption('VMS — PALIMANAN')
     pygame.mouse.set_visible(False)
+
+    # Off-screen canvas ukuran asli untuk renderer
+    vms_canvas = pygame.Surface((config.SCREEN_W, config.SCREEN_H))
+
+    # Hitung skala agar canvas muat dalam panel 250×500 (jaga aspek rasio)
+    scale  = min(config.VMS_PANEL_W / config.SCREEN_W, config.VMS_PANEL_H / config.SCREEN_H)
+    dest_w = int(config.SCREEN_W * scale)
+    dest_h = int(config.SCREEN_H * scale)
 
     clock = pygame.time.Clock()
     fonts = load_fonts()
@@ -62,9 +67,14 @@ def main():
         tick = pygame.time.get_ticks()
 
         if data is not None:
-            renderer.draw_vehicle(screen, fonts, data, tick)
+            renderer.draw_vehicle(vms_canvas, fonts, data, tick)
         else:
-            renderer.draw_waiting(screen, fonts)
+            renderer.draw_waiting(vms_canvas, fonts)
+
+        # Fullscreen hitam, lalu blit panel VMS di kiri atas
+        screen.fill(config.COLOR_BG)
+        scaled = pygame.transform.scale(vms_canvas, (dest_w, dest_h))
+        screen.blit(scaled, (0, 0))
 
         pygame.display.flip()
         clock.tick(config.FPS)

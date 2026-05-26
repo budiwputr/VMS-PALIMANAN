@@ -3,10 +3,14 @@ API_BASE_URL  = 'http://localhost:3000'
 API_KEY       = 'test-client-key'
 POLL_INTERVAL = 3  # detik
 
-# Layar — portrait
+# Layar — portrait (canvas internal renderer)
 SCREEN_W = 768
 SCREEN_H = 1280
 FPS      = 30
+
+# Area VMS di layar fullscreen (kiri atas)
+VMS_PANEL_W = 250
+VMS_PANEL_H = 500
 
 # Zona tinggi (px) — total harus = SCREEN_H
 ZONE_HEADER = 80
