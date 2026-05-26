@@ -1,0 +1,4 @@
+vms-display/venv/
+vms-display/__pycache__/
+*.pyc
+*.pyo
